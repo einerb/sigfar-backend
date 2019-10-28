@@ -10,37 +10,6 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    public function signup(Request $request)
-    {
-        $request->validate([
-            'name'     => 'required|string',
-            'lastname' => 'required|string',
-            'email'    => 'required|string|email|unique:users',
-            'password' => 'required|string',
-            'role_id'  => 'integer',
-            'birthdate' => 'string',
-            'address'  => 'string',
-            'phone'    => 'string',
-            'status'   => 'boolean',
-        ]);
-        $user = new User([
-            'name'     => $request->name,
-            'lastname' => $request->lastname,
-            'email'    => $request->email,
-            'password' => bcrypt($request->password),
-            'role_id' => $request->role_id,
-            'birthdate' => $request->birthdate,
-            'address' => $request->address,
-            'phone' => $request->phone,
-            'status' => $request->status,
-            'activation_token'  => Str::random(60),
-        ]);
-        $user->save();
-        /* $user->notify(new SignupActivate($user)); */
-
-        return response()->json(['message' => 'User created successfully!'], 201);
-    }
-
     public function login(Request $request)
     {
         $request->validate([
@@ -68,6 +37,7 @@ class AuthController extends Controller
                 $tokenResult->token->expires_at
             )
                 ->toDateTimeString(),
+            'user' => $user
         ]);
     }
 
@@ -82,7 +52,7 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
-    
+
     public function signupActivate($token)
     {
         $user = User::where('activation_token', $token)->first();

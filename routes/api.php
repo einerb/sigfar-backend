@@ -26,6 +26,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::apiResource('permissions', 'PermissionController');
         Route::apiResource('schedules', 'ScheduleController');
         Route::apiResource('inventories', 'InventoryController');
+        Route::apiResource('users', 'UserController');
         /* Route::apiResource('suppliers', 'SupplierController');
          Route::apiResource('orders', 'OrderController');
         Route::apiResource('product-supliers', 'ProductSupplierController'); */
