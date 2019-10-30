@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
     public function index()
     {
         try {
-
-            $users = User::all();
+            $users = User::with('role')->get();
 
             $response = [
                 'success' => true,
@@ -26,7 +25,7 @@ class UserController extends Controller
         }
     }
 
-    public function signup(Request $request)
+    public function store(Request $request)
     {
         try {
             $request->validate([
@@ -38,7 +37,6 @@ class UserController extends Controller
                 'birthdate' => 'string',
                 'address'  => 'string',
                 'phone'    => 'string',
-                'status'   => 'boolean',
             ]);
             $user = new User([
                 'name'     => $request->name,
@@ -49,13 +47,12 @@ class UserController extends Controller
                 'birthdate' => $request->birthdate,
                 'address' => $request->address,
                 'phone' => $request->phone,
-                'status' => $request->status,
                 'activation_token'  => Str::random(60),
             ]);
             $user->save();
             /* $user->notify(new SignupActivate($user)); */
 
-            return response()->json(['message' => 'User created successfully!'], 201);
+            return response()->json(['message' => 'User created successfully!'], 200);
         } catch (Exception $e) {
             return jsend_error('Error: ' . $e->getMessage());
         }
