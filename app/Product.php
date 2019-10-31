@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Supplier;
+use App\Order;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -21,8 +21,8 @@ class Product extends Model
         'status',
     ];
 
-    public function supplier()
+    public function order()
     {
-        return $this->belongsToMany(Supplier::class);
+        return $this->belongsToMany(Order::class);
     }
 }

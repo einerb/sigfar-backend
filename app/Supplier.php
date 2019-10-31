@@ -15,9 +15,4 @@ class Supplier extends Model
         'phone',
         'email'
     ];
-
-    public function product()
-    {
-        return $this->belongsToMany(Product::class);
-    }
 }

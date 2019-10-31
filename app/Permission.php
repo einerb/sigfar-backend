@@ -12,6 +12,7 @@ class Permission extends Model
         'description',
         'date_start',
         'date_end',
+        'status',
         'user_id'
     ];
 

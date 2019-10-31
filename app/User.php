@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Role;
+use App\Order;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
@@ -53,5 +54,10 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function order()
+    {
+        return $this->belongsToMany(Order::class);
     }
 }
