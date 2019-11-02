@@ -16,7 +16,7 @@ class InventoryController extends Controller
     public function index()
     {
         try {
-            $inventory = Inventory::all();
+            $inventory = Inventory::with('product')->get();
 
             $response = [
                 'success' => true,
@@ -87,7 +87,7 @@ class InventoryController extends Controller
     public function show($id)
     {
         try {
-            $inventory = Inventory::find($id);
+            $inventory = Inventory::with('product')->where('id', $id)->get();
 
             if (!$inventory) return jsend_error('Inventory not found!');
 
@@ -144,8 +144,23 @@ class InventoryController extends Controller
      * @param  \App\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventory $inventory)
+    public function destroy($id)
     {
-        //
+        try {
+            $inventory = Inventory::find($id);
+            if (!$inventory) return jsend_error('Inventory not found!');
+
+            $inventory->status = false;
+            $inventory->save();
+
+            $response = [
+                'success' => true,
+                'message' => 'Inventory has been disabled!'
+            ];
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            return jsend_error('Error: ' . $e->getMessage());
+        }
     }
 }

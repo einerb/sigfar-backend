@@ -16,7 +16,7 @@ class PermissionController extends Controller
     public function index()
     {
         try {
-            $permission = Permission::all();
+            $permission = Permission::with('user')->get();
 
             $response = [
                 'success' => true,
@@ -81,7 +81,7 @@ class PermissionController extends Controller
     public function show($id)
     {
         try {
-            $permission = Permission::find($id);
+            $permission = Permission::with('user')->where('id', $id)->get();
 
             if (!$permission) return jsend_error('Permission not found!');
 
@@ -121,6 +121,32 @@ class PermissionController extends Controller
                 'success' => true,
                 'data' => $permission,
                 'message' => 'Successfully updated permission!'
+            ];
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            return jsend_error('Error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Inventory  $inventory
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        try {
+            $permission = Permission::find($id);
+            if (!$permission) return jsend_error('Permission not found!');
+
+            $permission->status = false;
+            $permission->save();
+
+            $response = [
+                'success' => true,
+                'message' => 'Permission has been disabled!'
             ];
 
             return response()->json($response, 200);

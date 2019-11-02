@@ -22,8 +22,10 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('user', 'AuthController@user');
         Route::apiResource('products', 'ProductController');
         Route::apiResource('permissions', 'PermissionController');
+        Route::put('permissions/destroy/{id}', 'PermissionController@destroy');
         Route::apiResource('schedules', 'ScheduleController');
         Route::apiResource('inventories', 'InventoryController');
+        Route::put('inventories/destroy/{id}', 'InventoryController@destroy');
         Route::apiResource('users', 'UserController');
         Route::apiResource('roles', 'RoleController');
         /* Route::apiResource('suppliers', 'SupplierController');

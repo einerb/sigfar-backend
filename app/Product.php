@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Order;
+use App\Supplier;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -24,5 +25,10 @@ class Product extends Model
     public function order()
     {
         return $this->belongsToMany(Order::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsToMany(Supplier::class);
     }
 }
