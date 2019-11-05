@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Schedule;
 use App\User;
 use Illuminate\Http\Request;
@@ -38,22 +39,25 @@ class ScheduleController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $request->validate([
-                'description' => 'string',
-                'date_start' => 'required',
-                'time_start' => 'required',
-                'time_end' => 'required',
-                'user_id' => 'integer'
-            ]);
-            $schedule = new Schedule([
-                'description'     => $request->description,
-                'date_start'     => $request->date_start,
-                'time_start'     => $request->time_start,
-                'time_end'     => $request->time_end,
-                'user_id' => $request->user_id
-            ]);
+        $v = Validator::make($request->all(), [
+            'description' => 'string',
+            'date_start' => 'required',
+            'time_start' => 'required',
+            'time_end' => 'required',
+            'user_id' => 'integer'
+        ]);
 
+        if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
+
+        $schedule = new Schedule([
+            'description'     => $request->description,
+            'date_start'     => $request->date_start,
+            'time_start'     => $request->time_start,
+            'time_end'     => $request->time_end,
+            'user_id' => $request->user_id
+        ]);
+
+        try {
             $user = User::find($request->user_id);
 
             if (!$user) return jsend_error('User not found!');
@@ -136,7 +140,5 @@ class ScheduleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        
-    }
+    { }
 }

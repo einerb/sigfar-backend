@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Permission;
 use App\User;
 use Illuminate\Http\Request;
@@ -38,22 +39,25 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $request->validate([
-                'type' => 'required|string',
-                'description' => 'string',
-                'date_start' => 'required',
-                'date_end' => 'required',
-                'user_id' => 'integer'
-            ]);
-            $permission = new Permission([
-                'type'     => $request->type,
-                'description'     => $request->description,
-                'date_start'     => $request->date_start,
-                'date_end'     => $request->date_end,
-                'user_id' => $request->user_id
-            ]);
+        $v = Validator::make($request->all(), [
+            'type' => 'required|string',
+            'description' => 'string',
+            'date_start' => 'required',
+            'date_end' => 'required',
+            'user_id' => 'integer'
+        ]);
 
+        if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
+        
+        $permission = new Permission([
+            'type'     => $request->type,
+            'description'     => $request->description,
+            'date_start'     => $request->date_start,
+            'date_end'     => $request->date_end,
+            'user_id' => $request->user_id
+        ]);
+
+        try {
             $user = User::find($request->user_id);
 
             if (!$user) return jsend_error('User not found!');

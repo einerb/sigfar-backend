@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -27,28 +28,32 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $v = Validator::make($request->all(), [
+            'name'     => 'required|string',
+            'lastname' => 'required|string',
+            'email'    => 'required|string|email|unique:users',
+            'password' => 'required|string',
+            'role_id'  => 'numeric',
+            'birthdate' => 'string',
+            'address'  => 'string',
+            'phone'    => 'string',
+        ]);
+
+        if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
+
+        $user = new User([
+            'name'     => $request->name,
+            'lastname' => $request->lastname,
+            'email'    => $request->email,
+            'password' => bcrypt($request->password),
+            'role_id' => $request->role_id,
+            'birthdate' => $request->birthdate,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'activation_token'  => Str::random(60),
+        ]);
+
         try {
-            $request->validate([
-                'name'     => 'required|string',
-                'lastname' => 'required|string',
-                'email'    => 'required|string|email|unique:users',
-                'password' => 'required|string',
-                'role_id'  => 'integer',
-                'birthdate' => 'string',
-                'address'  => 'string',
-                'phone'    => 'string',
-            ]);
-            $user = new User([
-                'name'     => $request->name,
-                'lastname' => $request->lastname,
-                'email'    => $request->email,
-                'password' => bcrypt($request->password),
-                'role_id' => $request->role_id,
-                'birthdate' => $request->birthdate,
-                'address' => $request->address,
-                'phone' => $request->phone,
-                'activation_token'  => Str::random(60),
-            ]);
             $user->save();
             /* $user->notify(new SignupActivate($user)); */
 

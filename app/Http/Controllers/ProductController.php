@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Product;
 use Exception;
 use Illuminate\Http\Request;
@@ -39,19 +40,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $v = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'health_registration' => 'required|string',
+            'date_dispatch' => 'required',
+            'expiration_date' => 'required',
+            'medical_specimen' => 'boolean',
+            'unity' => 'required|string',
+            'via_administration' => 'required|string',
+            'concentration' => 'required|string',
+            'pharmaceutical_form' => 'required|string'
+        ]);
+
+        if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
+
         try {
-            $request->validate([
-                'name' => 'required|string',
-                'description' => 'required|string',
-                'health_registration' => 'required|string',
-                'date_dispatch' => 'required',
-                'expiration_date' => 'required',
-                'medical_specimen' => 'boolean',
-                'unity' => 'required|string',
-                'via_administration' => 'required|string',
-                'concentration' => 'required|string',
-                'pharmaceutical_form' => 'required|string'
-            ]);
             $product = new Product([
                 'name'     => $request->name,
                 'description'     => $request->description,
@@ -153,7 +157,8 @@ class ProductController extends Controller
             $product = Product::find($id);
             if (!$product) return jsend_error('Product not found!');
 
-            $product->delete();
+            $product->status = false;
+            $product->save();
 
             $response = [
                 'success' => true,

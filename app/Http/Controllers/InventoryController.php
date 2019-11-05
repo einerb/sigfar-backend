@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Inventory;
 use App\Product;
 use Illuminate\Http\Request;
@@ -38,28 +39,31 @@ class InventoryController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $request->validate([
-                'description' => 'string',
-                'date_start' => 'required',
-                'date_end' => 'required',
-                'quantity_start' => 'required|integer',
-                'quantity_end' => 'required|integer',
-                'price_start' => 'required',
-                'price_end' => 'required',
-                'product_id' => 'integer',
-            ]);
-            $inventory = new Inventory([
-                'description' => $request->description,
-                'date_start' => $request->date_start,
-                'date_end' => $request->date_end,
-                'quantity_start' => $request->quantity_start,
-                'quantity_end' => $request->quantity_end,
-                'price_start' => $request->price_start,
-                'price_end' => $request->price_end,
-                'product_id' => $request->product_id,
-            ]);
+        $v = Validator::make($request->all(), [
+            'description' => 'string',
+            'date_start' => 'required',
+            'date_end' => 'required',
+            'quantity_start' => 'required|integer',
+            'quantity_end' => 'required|integer',
+            'price_start' => 'required',
+            'price_end' => 'required',
+            'product_id' => 'integer',
+        ]);
 
+        if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
+
+        $inventory = new Inventory([
+            'description' => $request->description,
+            'date_start' => $request->date_start,
+            'date_end' => $request->date_end,
+            'quantity_start' => $request->quantity_start,
+            'quantity_end' => $request->quantity_end,
+            'price_start' => $request->price_start,
+            'price_end' => $request->price_end,
+            'product_id' => $request->product_id,
+        ]);
+
+        try {
             $product = Product::find($request->product_id);
 
             if (!$product) return jsend_error('Product not found!');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Validator;
 use App\Supplier;
 use Illuminate\Http\Request;
 
