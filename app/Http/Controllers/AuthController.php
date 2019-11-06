@@ -20,7 +20,7 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials)) {
             return response()->json([
                 'message' => 'Unauthorized'
-            ], 401);
+            ], 400);
         }
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
