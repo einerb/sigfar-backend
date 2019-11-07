@@ -17,6 +17,7 @@ class CreateSchedulesTable extends Migration
             $table->bigIncrements('id');
             $table->text('description');
             $table->date('date_start');
+            $table->date('date_end');
             $table->time('time_start');
             $table->time('time_end');
             $table->boolean('status')->default(true);

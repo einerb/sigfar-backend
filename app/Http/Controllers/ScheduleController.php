@@ -17,7 +17,7 @@ class ScheduleController extends Controller
     public function index()
     {
         try {
-            $schedule = Schedule::all();
+            $schedule = Schedule::with('user')->get();
 
             $response = [
                 'success' => true,
@@ -85,7 +85,7 @@ class ScheduleController extends Controller
     public function show($id)
     {
         try {
-            $schedule = Schedule::find($id);
+            $schedule = Schedule::with('user')->where('id', $id)->get();
 
             if (!$schedule) return jsend_error('Schedule not found!');
 

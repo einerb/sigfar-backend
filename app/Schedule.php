@@ -16,8 +16,8 @@ class Schedule extends Model
         'user_id',
     ];
 
-    public function schedule()
+    public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'id', 'user_id');
     }
 }
