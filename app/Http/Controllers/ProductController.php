@@ -46,7 +46,6 @@ class ProductController extends Controller
             'health_registration' => 'required|string',
             'date_dispatch' => 'required',
             'expiration_date' => 'required',
-            'medical_specimen' => 'boolean',
             'unity' => 'required|string',
             'via_administration' => 'required|string',
             'concentration' => 'required|string',
@@ -62,7 +61,6 @@ class ProductController extends Controller
                 'health_registration'     => $request->health_registration,
                 'date_dispatch'     => $request->date_dispatch,
                 'expiration_date'     => $request->expiration_date,
-                'medical_specimen'     => $request->medical_specimen,
                 'unity'     => $request->unity,
                 'via_administration'     => $request->via_administration,
                 'concentration' => $request->concentration,
@@ -126,11 +124,11 @@ class ProductController extends Controller
             $product->health_registration    = $request->health_registration;
             $product->date_dispatch    = $request->date_dispatch;
             $product->expiration_date     = $request->expiration_date;
-            $product->medical_specimen     = $request->medical_specimen;
             $product->unity   = $request->unity;
             $product->via_administration     = $request->via_administration;
             $product->concentration = $request->concentration;
             $product->pharmaceutical_form = $request->pharmaceutical_form;
+            $product->status = $request->status;
             $product->save();
 
             $response = [

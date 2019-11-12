@@ -14,7 +14,6 @@ class Product extends Model
         'health_registration',
         'date_dispatch',
         'expiration_date',
-        'medical_specimen',
         'unity',
         'via_administration',
         'concentration',

@@ -20,7 +20,6 @@ class CreateProductsTable extends Migration
             $table->string('health_registration');
             $table->date('date_dispatch');
             $table->date('expiration_date');
-            $table->boolean('medical_specimen')->nullable();
             $table->string('unity');
             $table->string('via_administration');
             $table->string('concentration');

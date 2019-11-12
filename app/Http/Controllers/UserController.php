@@ -34,7 +34,6 @@ class UserController extends Controller
             'email'    => 'required|string|email|unique:users',
             'password' => 'required|string',
             'role_id'  => 'numeric',
-            'birthdate' => 'string',
             'address'  => 'string',
             'phone'    => 'string',
         ]);
@@ -47,7 +46,6 @@ class UserController extends Controller
             'email'    => $request->email,
             'password' => bcrypt($request->password),
             'role_id' => $request->role_id,
-            'birthdate' => $request->birthdate,
             'address' => $request->address,
             'phone' => $request->phone,
             'activation_token'  => Str::random(60),
@@ -99,7 +97,6 @@ class UserController extends Controller
             $user->lastname = $request->lastname;
             $user->email    = $request->email;
             $user->role_id = $request->role_id;
-            $user->birthdate = $request->birthdate;
             $user->address = $request->address;
             $user->phone = $request->phone;
             $user->status = $request->status;
