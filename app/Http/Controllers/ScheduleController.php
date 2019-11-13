@@ -42,6 +42,7 @@ class ScheduleController extends Controller
         $v = Validator::make($request->all(), [
             'description' => 'string',
             'date_start' => 'required',
+            'date_end' => 'required',
             'time_start' => 'required',
             'time_end' => 'required',
             'user_id' => 'integer'
@@ -52,6 +53,7 @@ class ScheduleController extends Controller
         $schedule = new Schedule([
             'description'     => $request->description,
             'date_start'     => $request->date_start,
+            'date_end'     => $request->date_end,
             'time_start'     => $request->time_start,
             'time_end'     => $request->time_end,
             'user_id' => $request->user_id
@@ -117,6 +119,7 @@ class ScheduleController extends Controller
 
             $schedule->description   = $request->description;
             $schedule->date_start    = $request->date_start;
+            $schedule->date_end    = $request->date_end;
             $schedule->time_start    = $request->time_start;
             $schedule->time_end    = $request->time_end;
             $schedule->save();

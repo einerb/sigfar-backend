@@ -158,4 +158,24 @@ class PermissionController extends Controller
             return jsend_error('Error: ' . $e->getMessage());
         }
     }
+
+    public function accept($id)
+    {
+        try {
+            $permission = Permission::find($id);
+            if (!$permission) return jsend_error('Permission not found!');
+
+            $permission->status = true;
+            $permission->save();
+
+            $response = [
+                'success' => true,
+                'message' => 'Permission has been activated!'
+            ];
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            return jsend_error('Error: ' . $e->getMessage());
+        }
+    }
 }

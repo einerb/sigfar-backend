@@ -19,7 +19,7 @@ class CreatePermissionsTable extends Migration
             $table->text('description');
             $table->date('date_start');
             $table->date('date_end');
-            $table->boolean('status')->default(true);
+            $table->boolean('status')->default(false);
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
