@@ -31,6 +31,23 @@ class ScheduleController extends Controller
         }
     }
 
+    public function indexByUser($id)
+    {
+        try {
+            $schedule = Schedule::with('user')->where("user_id", $id)->get();
+
+            $response = [
+                'success' => true,
+                'data' => $schedule,
+                'message' => 'Successfully created schedule!'
+            ];
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            return jsend_error('Error: ' . $e->getMessage());
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *

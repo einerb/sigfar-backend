@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('permissions/destroy/{id}', 'PermissionController@destroy');
     Route::put('permissions/accept/{id}', 'PermissionController@accept');
     Route::apiResource('schedules', 'ScheduleController');
+    Route::get('schedules/byUser/{id}', 'ScheduleController@indexByUser');
     Route::apiResource('inventories', 'InventoryController');
     Route::put('inventories/destroy/{id}', 'InventoryController@destroy');
     Route::apiResource('users', 'UserController');
