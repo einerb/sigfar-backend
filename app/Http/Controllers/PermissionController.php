@@ -17,12 +17,29 @@ class PermissionController extends Controller
     public function index()
     {
         try {
-            $permission = Permission::with('user')->get();
+            $permission = Permission::with('user')->orderBy('created_at', 'desc')->get();
 
             $response = [
                 'success' => true,
                 'data' => $permission,
                 'message' => 'Successful permission listing!'
+            ];
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            return jsend_error('Error: ' . $e->getMessage());
+        }
+    }
+
+    public function indexByUser($id)
+    {
+        try {
+            $permission = Permission::with('user')->where("user_id", $id)->orderBy('created_at', 'desc')->get();
+
+            $response = [
+                'success' => true,
+                'data' => $permission,
+                'message' => 'Successfully created permiss$permission!'
             ];
 
             return response()->json($response, 200);
@@ -44,11 +61,10 @@ class PermissionController extends Controller
             'description' => 'string',
             'date_start' => 'required',
             'date_end' => 'required',
-            'user_id' => 'integer'
         ]);
 
         if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
-        
+
         $permission = new Permission([
             'type'     => $request->type,
             'description'     => $request->description,
@@ -112,7 +128,6 @@ class PermissionController extends Controller
     {
         try {
             $permission = Permission::find($id);
-
             if (!$permission) return jsend_error('Permission not found!');
 
             $permission->type    = $request->type;
@@ -159,18 +174,18 @@ class PermissionController extends Controller
         }
     }
 
-    public function accept($id)
+    public function acceptDeny(Request $request, $id)
     {
         try {
             $permission = Permission::find($id);
             if (!$permission) return jsend_error('Permission not found!');
 
-            $permission->status = true;
+            $permission->status = $request->status;
             $permission->save();
 
             $response = [
                 'success' => true,
-                'message' => 'Permission has been activated!'
+                'message' => 'Permission status has changed!'
             ];
 
             return response()->json($response, 200);

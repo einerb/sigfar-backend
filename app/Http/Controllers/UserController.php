@@ -26,6 +26,23 @@ class UserController extends Controller
         }
     }
 
+    public function indexByRole($id)
+    {
+        try {
+            $users = User::with('role')->where("role_id", $id)->get();
+
+            $response = [
+                'success' => true,
+                'data' => $users,
+                'message' => 'Successful users listing!'
+            ];
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            return jsend_error('Error: ' . $e->getMessage());
+        }
+    }
+
     public function store(Request $request)
     {
         $v = Validator::make($request->all(), [

@@ -26,12 +26,14 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('products/destroy/{id}', 'ProductController@destroy');
     Route::apiResource('permissions', 'PermissionController');
     Route::put('permissions/destroy/{id}', 'PermissionController@destroy');
-    Route::put('permissions/accept/{id}', 'PermissionController@accept');
+    Route::put('permissions/acceptDeny/{id}', 'PermissionController@acceptDeny');
+    Route::get('permissions/byUser/{id}', 'PermissionController@indexByUser');
     Route::apiResource('schedules', 'ScheduleController');
     Route::get('schedules/byUser/{id}', 'ScheduleController@indexByUser');
     Route::apiResource('inventories', 'InventoryController');
     Route::put('inventories/destroy/{id}', 'InventoryController@destroy');
     Route::apiResource('users', 'UserController');
+    Route::get('users/byuser/{id}', "UserController@indexByRole");
     Route::apiResource('roles', 'RoleController');
     /* Route::apiResource('suppliers', 'SupplierController');
          Route::apiResource('orders', 'OrderController');

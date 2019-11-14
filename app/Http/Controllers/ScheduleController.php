@@ -139,6 +139,7 @@ class ScheduleController extends Controller
             $schedule->date_end    = $request->date_end;
             $schedule->time_start    = $request->time_start;
             $schedule->time_end    = $request->time_end;
+            $schedule->status = $request->status;
             $schedule->save();
 
             $response = [
