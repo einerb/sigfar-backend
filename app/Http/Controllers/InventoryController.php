@@ -17,7 +17,7 @@ class InventoryController extends Controller
     public function index()
     {
         try {
-            $inventory = Inventory::with('product')->orderBy('created_at', 'desc')->get();
+            $inventory = Inventory::with('product')->orderBy('created_at', 'desc')->where('status', true)->get();
 
             $response = [
                 'success' => true,
