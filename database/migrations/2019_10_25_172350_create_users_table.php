@@ -20,7 +20,6 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->bigInteger('role_id')->unsigned();
-            $table->date('birthdate')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->boolean('status')->default(true);

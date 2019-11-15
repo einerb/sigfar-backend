@@ -35,7 +35,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('users', 'UserController');
     Route::get('users/byuser/{id}', "UserController@indexByRole");
     Route::apiResource('roles', 'RoleController');
+    Route::apiResource('orders', 'OrderController');
+    Route::get('orders/byUser/{id}', 'OrderController@indexByUser');
     /* Route::apiResource('suppliers', 'SupplierController');
-         Route::apiResource('orders', 'OrderController');
         Route::apiResource('product-supliers', 'ProductSupplierController'); */
 });

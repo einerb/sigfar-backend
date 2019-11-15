@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Order;
+use App\DetailOrder;
 use App\Supplier;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,11 +20,6 @@ class Product extends Model
         'pharmaceutical_form',
         'status',
     ];
-
-    public function order()
-    {
-        return $this->belongsToMany(Order::class);
-    }
 
     public function supplier()
     {
