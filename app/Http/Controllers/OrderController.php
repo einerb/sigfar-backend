@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\User;
 use Validator;
 use Exception;
 use Illuminate\Http\Request;
@@ -18,7 +19,10 @@ class OrderController extends Controller
     {
         try {
 
-            $orders = Order::with(['user', 'product'])->orderBy('created_at', 'desc')->get();
+            $orders = Order::join('details_orders', "orders.id", "=", "details_orders.order_id")
+                ->join('products', "details_orders.product_id", "=", "products.id")
+                ->join('users', "users.id","=","orders.user_id")
+                ->get();
 
             $response = [
                 'success' => true,
@@ -35,7 +39,7 @@ class OrderController extends Controller
     public function indexByUser($id)
     {
         try {
-            $order = Order::with(['user', 'product'])->where("user_id", $id)->get();
+            $order = Order::with('user')->where("user_id", $id)->get();
 
             $response = [
                 'success' => true,
@@ -58,25 +62,28 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $v = Validator::make($request->all(), [
-            'user_id' => 'required|integer',
-            'description' => 'string',
-            'quantity' => 'integer',
-            'price' => 'required',
-            'product_id' => 'required|integer',
-            'delivery_date' => 'required'
+            'user_id' => 'required|integer'
         ]);
 
         if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
 
         try {
+            $first = "00000001";
+            if (Order::all()->count() > 0) {
+                $increment = Order::orderBy('created_at', 'DESC')->first();
+                $consecutive = str_pad($increment->id + 1, 8, "0", STR_PAD_LEFT);
+            } else {
+                $consecutive = $first;
+            }
+
             $order = new Order([
-                'description' => $request->description,
-                'quantity' => $request->quantity,
-                'price' => $request->price,
-                'product_id' => $request->product_id,
-                'delivery_date' => $request->delivery_date,
+                'code' => $consecutive,
                 'user_id' => $request->user_id,
             ]);
+
+            $user = User::find($request->user_id);
+            if (!$user) return jsend_error('User not found!');
+
             $order->save();
 
             $response = [

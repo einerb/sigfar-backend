@@ -4,28 +4,26 @@ namespace App;
 
 use App\User;
 use App\Product;
+use App\DetailsOrder;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
     protected $fillable = [
-        'description',
-        'quantity',
-        'price',
+        'code',
         'user_id',
-        'product_id',
         'delivery_date',
-        'status'
+        'status',
     ];
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function detailsOrder()
+    {
+        return $this->hasMany(DetailsOrder::class);
     }
 }

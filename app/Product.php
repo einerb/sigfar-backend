@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
+        'code',
         'name',
         'description',
         'health_registration',
@@ -18,6 +19,7 @@ class Product extends Model
         'via_administration',
         'concentration',
         'pharmaceutical_form',
+        'image',
         'status',
     ];
 

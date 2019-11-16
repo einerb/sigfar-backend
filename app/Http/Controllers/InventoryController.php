@@ -52,7 +52,16 @@ class InventoryController extends Controller
 
         if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
 
+        $first = "00000001";
+        if (Inventory::all()->count() > 0) {
+            $increment = Inventory::orderBy('created_at', 'DESC')->first();
+            $consecutive = str_pad($increment->id + 1, 8, "0", STR_PAD_LEFT);
+        } else {
+            $consecutive = $first;
+        }
+
         $inventory = new Inventory([
+            'code' => $consecutive,
             'description' => $request->description,
             'date_start' => $request->date_start,
             'date_end' => $request->date_end,

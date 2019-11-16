@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 use App\Product;
 use Exception;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -55,7 +56,16 @@ class ProductController extends Controller
         if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
 
         try {
+            $first = "00000001";
+            if (Product::all()->count() > 0) {
+                $increment = Product::orderBy('created_at', 'DESC')->first();
+                $consecutive = str_pad($increment->id + 1, 8, "0", STR_PAD_LEFT);
+            } else {
+                $consecutive = $first;
+            }
+
             $product = new Product([
+                'code' => $consecutive,
                 'name'     => $request->name,
                 'description'     => $request->description,
                 'health_registration'     => $request->health_registration,
@@ -67,6 +77,7 @@ class ProductController extends Controller
                 'pharmaceutical_form' => $request->pharmaceutical_form
             ]);
             $product->save();
+
 
             $response = [
                 'success' => true,

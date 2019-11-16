@@ -48,6 +48,16 @@ class PermissionController extends Controller
         }
     }
 
+    public function checkPermission($id)
+    {
+        try {
+            $permission = Permission::whereRaw('status = 1 && user_id = ' . $id . ' && MONTH(created_at) = MONTH(CURRENT_DATE())')->count();
+            return $permission;
+        } catch (Exception $e) {
+            return jsend_error('Error: ' . $e->getMessage());
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -75,10 +85,13 @@ class PermissionController extends Controller
 
         try {
             $user = User::find($request->user_id);
-
             if (!$user) return jsend_error('User not found!');
 
-            $permission->save();
+            if (self::checkPermission($request->user_id) === 3) {
+                return jsend_error('Límite máximo de permisos en el mes');
+            } else {
+                $permission->save();
+            }
 
             $response = [
                 'success' => true,
@@ -154,25 +167,6 @@ class PermissionController extends Controller
      * @param  \App\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        try {
-            $permission = Permission::find($id);
-            if (!$permission) return jsend_error('Permission not found!');
-
-            $permission->status = false;
-            $permission->save();
-
-            $response = [
-                'success' => true,
-                'message' => 'Permission has been disabled!'
-            ];
-
-            return response()->json($response, 200);
-        } catch (Exception $e) {
-            return jsend_error('Error: ' . $e->getMessage());
-        }
-    }
 
     public function acceptDeny(Request $request, $id)
     {
@@ -181,6 +175,13 @@ class PermissionController extends Controller
             if (!$permission) return jsend_error('Permission not found!');
 
             $permission->status = $request->status;
+            $permission->user_id = $request->user_id;
+
+            if (self::checkPermission($request->user_id) === 3) {
+                return jsend_error('Límite máximo de permisos en el mes');
+            } else {
+                $permission->save();
+            }
             $permission->save();
 
             $response = [

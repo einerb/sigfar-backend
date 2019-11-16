@@ -15,6 +15,7 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->uuid('code');
             $table->string('name');
             $table->text('description');
             $table->string('health_registration');
@@ -24,6 +25,7 @@ class CreateProductsTable extends Migration
             $table->string('via_administration');
             $table->string('concentration');
             $table->string('pharmaceutical_form');
+            $table->text('image')->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
         });
