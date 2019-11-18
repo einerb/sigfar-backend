@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('user', 'AuthController@user');
     Route::apiResource('products', 'ProductController');
     Route::put('products/destroy/{id}', 'ProductController@destroy');
+    Route::get('products/byInventory', 'ProductController@indexByInventory');
     Route::apiResource('permissions', 'PermissionController');
     Route::put('permissions/acceptDeny/{id}', 'PermissionController@acceptDeny');
     Route::get('permissions/byUser/{id}', 'PermissionController@indexByUser');

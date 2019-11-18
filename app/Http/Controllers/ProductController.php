@@ -33,6 +33,23 @@ class ProductController extends Controller
         }
     }
 
+    public function indexByInventory()
+    {
+        try {
+            $product = Product::join('inventories',  'products.id', '=', 'inventories.product_id')->get();
+
+            $response = [
+                'success' => true,
+                'data' => $product,
+                'message' => 'Successful produc$product listing!'
+            ];
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            return jsend_error('Error: ' . $e->getMessage());
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
