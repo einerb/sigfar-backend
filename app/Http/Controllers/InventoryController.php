@@ -32,66 +32,6 @@ class InventoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $v = Validator::make($request->all(), [
-            'description' => 'string',
-            'date_start' => 'required',
-            'date_end' => 'required',
-            'quantity_start' => 'required|integer',
-            'quantity_end' => 'required|integer',
-            'price_start' => 'required',
-            'price_end' => 'required',
-            'product_id' => 'integer',
-        ]);
-
-        if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
-
-        $first = "00000001";
-        if (Inventory::all()->count() > 0) {
-            $increment = Inventory::orderBy('created_at', 'DESC')->first();
-            $consecutive = str_pad($increment->id + 1, 8, "0", STR_PAD_LEFT);
-        } else {
-            $consecutive = $first;
-        }
-
-        $inventory = new Inventory([
-            'code' => $consecutive,
-            'description' => $request->description,
-            'date_start' => $request->date_start,
-            'date_end' => $request->date_end,
-            'quantity_start' => $request->quantity_start,
-            'quantity_end' => $request->quantity_end,
-            'price_start' => $request->price_start,
-            'price_end' => $request->price_end,
-            'product_id' => $request->product_id,
-        ]);
-
-        try {
-            $product = Product::find($request->product_id);
-
-            if (!$product) return jsend_error('Product not found!');
-
-            $inventory->save();
-
-            $response = [
-                'success' => true,
-                'data' => $inventory,
-                'message' => 'Successfully created inventory!'
-            ];
-
-            return response()->json($response, 200);
-        } catch (Exception $e) {
-            return jsend_error('Error: ' . $e->getMessage());
-        }
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Inventory  $inventory

@@ -9,14 +9,14 @@ class Inventory extends Model
 {
     protected $fillable = [
         'code',
-        'description',
         'date_start',
         'date_end',
         'quantity_start',
         'quantity_end',
         'price_start',
         'price_end',
-        'product_id'
+        'product_id',
+        'user_id'
     ];
 
     public function product()

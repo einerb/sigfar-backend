@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Inventory;
 use Validator;
 use App\Product;
 use Exception;
@@ -41,7 +42,7 @@ class ProductController extends Controller
             $response = [
                 'success' => true,
                 'data' => $product,
-                'message' => 'Successful produc$product listing!'
+                'message' => 'Successful product listing!'
             ];
 
             return response()->json($response, 200);
@@ -67,7 +68,11 @@ class ProductController extends Controller
             'unity' => 'required|string',
             'via_administration' => 'required|string',
             'concentration' => 'required|string',
-            'pharmaceutical_form' => 'required|string'
+            'pharmaceutical_form' => 'required|string',
+            'date_start' => 'required',
+            'quantity_start' => 'required|integer',
+            'price_start' => 'required',
+            'user_id'=> 'required|integer'
         ]);
 
         if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
@@ -95,10 +100,27 @@ class ProductController extends Controller
             ]);
             $product->save();
 
+            $second = "00000001";
+            if (Inventory::all()->count() > 0) {
+                $increment2 = Inventory::orderBy('created_at', 'DESC')->first();
+                $consecutive2 = str_pad($increment2->id + 1, 8, "0", STR_PAD_LEFT);
+            } else {
+                $consecutive2 = $second;
+            }
+            $inventario = new Inventory([
+                'code' => $consecutive2,
+                'date_start' => $request->date_start,
+                'quantity_start' => $request->quantity_start,
+                'price_start' => $request->price_start,
+                'price_end' => $request->price_start,
+                'product_id' => $product->id,
+                'user_id' => $request->user_id
+            ]);
+            $inventario->save();
 
             $response = [
                 'success' => true,
-                'data' => $product,
+                'data' => $product, $inventario,
                 'message' => 'Successfully created product!'
             ];
 

@@ -16,16 +16,17 @@ class CreateInventoriesTable extends Migration
         Schema::create('inventories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('code');
-            $table->text('description')->nullable();
             $table->date('date_start');
-            $table->date('date_end');
+            $table->date('date_end')->nullable();
             $table->integer('quantity_start');
-            $table->integer('quantity_end');
+            $table->integer('quantity_end')->nullable();
             $table->double('price_start');
-            $table->double('price_end');
+            $table->double('price_end')->nullable();
             $table->double('status')->default(true);
             $table->bigInteger('product_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
