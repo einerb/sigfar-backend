@@ -134,11 +134,6 @@ class ScheduleController extends Controller
 
             if (!$schedule) return jsend_error('Schedule not found!');
 
-            $schedule->description   = $request->description;
-            $schedule->date_start    = $request->date_start;
-            $schedule->date_end    = $request->date_end;
-            $schedule->time_start    = $request->time_start;
-            $schedule->time_end    = $request->time_end;
             $schedule->status = $request->status;
             $schedule->save();
 
