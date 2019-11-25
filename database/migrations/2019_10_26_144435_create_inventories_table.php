@@ -22,6 +22,7 @@ class CreateInventoriesTable extends Migration
             $table->integer('quantity_end')->nullable();
             $table->double('price_start');
             $table->double('price_end')->nullable();
+            $table->double('stock')->nullable();
             $table->double('status')->default(true);
             $table->bigInteger('product_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DetailsOrder;
+use Illuminate\Support\Facades\DB;
 use App\Order;
 use App\Product;
 use Validator;
@@ -33,6 +34,18 @@ class DetailsOrderController extends Controller
         }
     }
 
+    public function indexOrder($id)
+    {
+        try {
+
+            $orders = Order::select('id')->first();
+
+            return $orders->id;
+        } catch (Exception $e) {
+            return jsend_error('Error: ' . $e->getMessage());
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -45,26 +58,23 @@ class DetailsOrderController extends Controller
             'description' => 'string',
             'quantity' => 'integer',
             'price'  => 'required',
-            'order_id' => 'required|integer',
             'product_id' => 'required|integer'
         ]);
 
         if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
 
+        $orders = Order::select('id')->first();
         try {
             $detailsOrder = new DetailsOrder([
                 'description' => $request->description,
                 'quantity' => $request->quantity,
                 'price' => $request->price,
-                'order_id' => $request->order_id,
+                'order_id' => $orders->id,
                 'product_id' => $request->product_id
             ]);
 
             $product = Product::find($request->product_id);
             if (!$product) return jsend_error('Producto no existe!');
-
-            $order = Order::find($request->order_id);
-            if (!$order) return jsend_error('Orden no existe!');
 
             $detailsOrder->save();
 

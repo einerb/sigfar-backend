@@ -21,7 +21,7 @@ class OrderController extends Controller
 
             $orders = Order::join('details_orders', "orders.id", "=", "details_orders.order_id")
                 ->join('products', "details_orders.product_id", "=", "products.id")
-                ->join('users', "users.id","=","orders.user_id")
+                ->join('users', "users.id","=","orders.user_id")->where('orders.status',"=",3)
                 ->get();
 
             $response = [
@@ -39,7 +39,7 @@ class OrderController extends Controller
     public function indexByUser($id)
     {
         try {
-            $order = Order::with('user')->where("user_id", $id)->get();
+            $order = Order::with('user')->where("user_id", $id)->where("orders.status","=",1)->get();
 
             $response = [
                 'success' => true,

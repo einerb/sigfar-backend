@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('orders', 'OrderController');
     Route::get('orders/byUser/{id}', 'OrderController@indexByUser');
     Route::apiResource('detailsOrder', 'DetailsOrderController');
+    Route::get('detailsOrder/exist/{id}', 'DetailsOrderController@indexOrder');
     /* Route::apiResource('suppliers', 'SupplierController');
         Route::apiResource('product-supliers', 'ProductSupplierController'); */
 });

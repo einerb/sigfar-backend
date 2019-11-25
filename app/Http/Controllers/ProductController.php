@@ -72,7 +72,7 @@ class ProductController extends Controller
             'date_start' => 'required',
             'quantity_start' => 'required|integer',
             'price_start' => 'required',
-            'user_id'=> 'required|integer'
+            'user_id' => 'required|integer'
         ]);
 
         if ($v->fails()) return response()->json(["errors" => $v->errors()], 400);
@@ -107,12 +107,15 @@ class ProductController extends Controller
             } else {
                 $consecutive2 = $second;
             }
+
+            $precio_final = ($request->price_start * 5 / 100) + $request->price_start;
             $inventario = new Inventory([
                 'code' => $consecutive2,
                 'date_start' => $request->date_start,
                 'quantity_start' => $request->quantity_start,
                 'price_start' => $request->price_start,
-                'price_end' => $request->price_start,
+                'price_end' => $precio_final,
+                'stock' =>  $request->quantity_start,
                 'product_id' => $product->id,
                 'user_id' => $request->user_id
             ]);

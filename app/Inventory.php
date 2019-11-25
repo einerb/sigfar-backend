@@ -15,6 +15,7 @@ class Inventory extends Model
         'quantity_end',
         'price_start',
         'price_end',
+        'stock',
         'product_id',
         'user_id'
     ];
